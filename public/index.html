@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="Multiplayer pong">
+	<meta name="keywords" content="pong, arcade, multiplayer, io, socket">
+	<meta name="author" content="Owen Kuhn">
+	<meta id="metaMobile" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' 
+	name='viewport' />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="shortcut icon" href="favicon.ico">
+	<title>Pong</title>
+	<style>#preload {position:absolute;top:0;left:0;z-index:2;height:100vh;width:100%;background: #0F1419;transition: opacity .5s;}#preload svg {height:70vh;width:70vh;position:absolute;top:50%;left:50%;-webkit-transform: translate(-50%,-50%);-ms-transform: translate(-50%,-50%);-o-transform: translate(-50%,-50%);-moz-transform: translate(-50%,-50%);transform: translate(-50%,-50%);}svg circle {-webkit-animation: baller 3s infinite linear;animation: baller 3s infinite linear;}@-webkit-keyframes baller {0% {transform: translate(0,0);}25% {transform: translate(36%,12.25%);}75% {transform: translate(-35%,-17.75%);}100% {transform: translate(0,0);}}@keyframes baller {0% {transform: translate(0,0);}25% {transform: translate(36%,12.25%);}75% {transform: translate(-35%,-17.75%);}100% {transform: translate(0,0);}}
+</style>
+</head>
+<body>
+
+<svg id="homeBtn" onclick="goHome()" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 27.02 27.02"><path d="M3.674,24.876c0,0-0.024,0.604,0.566,0.604c0.734,0,6.811-0.008,6.811-0.008l0.01-5.581   c0,0-0.096-0.92,0.797-0.92h2.826c1.056,0,0.991,0.92,0.991,0.92l-0.012,5.563c0,0,5.762,0,6.667,0   c0.749,0,0.715-0.752,0.715-0.752V14.413l-9.396-8.358l-9.975,8.358C3.674,14.413,3.674,24.876,3.674,24.876z"/><path d="M0,13.635c0,0,0.847,1.561,2.694,0l11.038-9.338l10.349,9.28c2.138,1.542,2.939,0,2.939,0   L13.732,1.54L0,13.635z"/><polygon points="23.83,4.275 21.168,4.275 21.179,7.503 23.83,9.752  "/></svg>
+	<center id="preload" rel="preload">
+		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+			<rect x='5' y='20' height='25' width="5" fill="white"></rect>
+			<circle cx='50' cy='50' r='4' fill="white"></circle>
+			<rect x='90' y='50' height='25' width="5" fill="white"></rect>
+		</svg>
+	</center>
+	<div id="notification" onclick="deleteNotification();" style="left: calc(100% + 6px)"></div>
+	<center id="home" class="content">
+		<h1>Pong.io</h1>
+		<div class="btn" onclick="user.findGame();">Play</div>
+		<br>
+		<div class="btn" onclick="tabTo('host');">Host Private</div>
+		<br>
+		<div class="btn" onclick="tabTo('join');">Join Private</div>
+	</center>
+	<center id="host" class="content">
+		<h1>Host Game</h1>
+		<h3>This is the code your opponent will use to join</h3>
+		<input id="hostID" onkeyup="if(event.keyCode === 13){user.host();}" placeholder="Game Code" spellcheck="false" maxlength="20" />
+		<br>
+		<div class="btn" onclick="user.host()">Host</div>
+	</center>
+	<center id="join" class="content">
+		<h1>Join Game</h1>
+		<h3>Enter the game code from the host</h3>
+		<input id="joinID" onkeyup="if(event.keyCode === 13){user.join();}" placeholder="Game Code" spellcheck="false" maxlength="20" />
+		<br>
+		<div class="btn" onclick="user.join()">Join</div>
+	</center>
+	<center id="wait" class="content">
+		<h2 class="wait">Waiting for other players</h2>
+	</center>
+	<center id="message" class="content" ontouchend="setTimeout(function() {tabTo('home')},100);">
+		<h2>You Win</h2>
+		<h4>Press Any Key To Continue</h4>
+	</center>
+	<center id="game" class="content">
+		<canvas id="canvas"></canvas>
+		<div id="countdown"></div>
+	</center>
+
+	<link rel="stylesheet" href="style.css" />
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="script.js"></script>
+</body>
+</html>
